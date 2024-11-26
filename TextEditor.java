@@ -1,3 +1,4 @@
+import javax.print.DocFlavor.URL;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -97,20 +98,25 @@ public class TextEditor extends JFrame {
         setJMenuBar(menuBar);
     }
     private void showAboutInfo() {
-        String info = """
-            Proyecto Integrador Editor de Textos 
-            Materia: POO
-            Desarrollado por: Victor, Alexis, Christopher...            
-        """;
+        java.net.URL imageURL = getClass().getResource("/assets/cut.png");
+
+        if (imageURL != null) {
+            String info = "<html><body>"
+                + "<img src='" + imageURL + "' style='width:200px;' 'height:100px;' >"
+                + "<h1>Sobre Nosotros</h1>"
+                + "<h2>Proyecto Integrador</h2>"
+                + "<p><b>Materia:</b> POO</p>"
+                + "<p><b>Integrantes:</b> Victor, Alexis, Christopher</p>"
+                + "</body></html>";
+            JEditorPane editorPane = new JEditorPane("text/html", info);
+            editorPane.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(editorPane);
+            tabbedPane.addTab("Acerca de", scrollPane);
+            tabbedPane.setSelectedComponent(scrollPane);
+        } else {
+            System.out.println("Imagen no encontrada.");
+        }
     
-        JTextArea aboutTextArea = new JTextArea(info);
-        aboutTextArea.setEditable(false);
-        //aboutTextArea.setLineWrap(true);
-        //aboutTextArea.setWrapStyleWord(true);
-        
-        JScrollPane scrollPane = new JScrollPane(aboutTextArea);
-        tabbedPane.addTab("Info", scrollPane);
-        tabbedPane.setSelectedComponent(scrollPane);
     }
     
     private void createToolbar() {
