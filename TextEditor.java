@@ -9,6 +9,7 @@ public class TextEditor extends JFrame {
     private JTabbedPane tabbedPane;
     private Vector<TextTab> openFiles;
     private JMenuBar menuBar;
+    private JTextArea textArea;
     
     public TextEditor() {
         setTitle("Editor de Textos");
@@ -19,6 +20,8 @@ public class TextEditor extends JFrame {
         openFiles = new Vector<>();
         tabbedPane = new JTabbedPane();
         add(tabbedPane, BorderLayout.CENTER);
+        textArea = new JTextArea();
+        textArea.setEditable(false);
 
         createMenu();
         createToolbar();
@@ -26,8 +29,9 @@ public class TextEditor extends JFrame {
     
     private void createMenu() {
         menuBar = new JMenuBar();
-        
-        // Menú Archivo
+        /*
+         * Menú Archivo
+         */
         JMenu fileMenu = new JMenu("Archivo");
         JMenuItem newFileItem = new JMenuItem("Nuevo");
         fileMenu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -51,8 +55,9 @@ public class TextEditor extends JFrame {
         exitItem.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         menuBar.add(fileMenu);
-        
-        // Menú Edición
+        /* 
+        *Menú Edición
+        */
         JMenu editMenu = new JMenu("Edición");
         JMenuItem copyItem = new JMenuItem("Copiar");
         copyItem.addActionListener(e -> copyText());
@@ -76,8 +81,36 @@ public class TextEditor extends JFrame {
         editMenu.add(selectAllItem);
         
         menuBar.add(editMenu);
+        /* 
+        *Menú Acerca de Nosotros
+        */
+        JMenu aboutUs = new JMenu("Acerca de:");
+        aboutUs.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
+        JMenuItem aboutItem = new JMenuItem("Información");
+        aboutItem.addActionListener(e -> showAboutInfo()); // Evento para mostrar información
+        aboutItem.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        aboutUs.add(aboutItem);
+        
+        menuBar.add(aboutUs);
+
         setJMenuBar(menuBar);
+    }
+    private void showAboutInfo() {
+        String info = """
+            Proyecto Integrador Editor de Textos 
+            Materia: POO
+            Desarrollado por: Victor, Alexis, Christopher...            
+        """;
+    
+        JTextArea aboutTextArea = new JTextArea(info);
+        aboutTextArea.setEditable(false);
+        //aboutTextArea.setLineWrap(true);
+        //aboutTextArea.setWrapStyleWord(true);
+        
+        JScrollPane scrollPane = new JScrollPane(aboutTextArea);
+        tabbedPane.addTab("Info", scrollPane);
+        tabbedPane.setSelectedComponent(scrollPane);
     }
     
     private void createToolbar() {
@@ -120,7 +153,9 @@ public class TextEditor extends JFrame {
         TextTab newTab = new TextTab("Nuevo Archivo");
         openFiles.add(newTab);
         tabbedPane.addTab("Nuevo Archivo", newTab.getTextArea());
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1); 
     }
+    
     
     private void openFile() {
         JFileChooser fileChooser = new JFileChooser();
